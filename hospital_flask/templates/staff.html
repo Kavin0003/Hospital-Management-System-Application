@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Management - JK HOSPITALS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), #1a252f);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .staff-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            background: white;
+        }
+        
+        .staff-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-weight: 600;
+        }
+        
+        .staff-type {
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .medical-staff {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .admin-staff {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+        }
+        
+        .support-staff {
+            background-color: rgba(241, 196, 15, 0.1);
+            color: #f39c12;
+        }
+        
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+        
+        .active-status {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+        }
+        
+        .inactive-status {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: var(--secondary-color);
+            bottom: -8px;
+            left: 25%;
+            border-radius: 2px;
+        }
+        
+        .user-greeting {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+        
+        .btn-action {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand nav-brand" href="{{ url_for('dashboard.home') }}">
+                <i class="fas fa-hospital me-2"></i>JK HOSPITALS
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3 user-greeting">
+                    <i class="fas fa-user-circle me-2"></i>Welcome, {{ username }}
+                </span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Staff Management</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+                        <i class="fas fa-plus-circle me-2"></i>Add Staff
+                    </button>
+                </div>
+                
+                <!-- Staff Category Tabs -->
+                <ul class="nav nav-tabs mt-4" id="staffTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button">
+                            All Staff
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="medical-tab" data-bs-toggle="tab" data-bs-target="#medical" type="button">
+                            Medical Staff
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button">
+                            Administrative
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="support-tab" data-bs-toggle="tab" data-bs-target="#support" type="button">
+                            Support Staff
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Staff List -->
+            <div class="col-12">
+                <div class="tab-content" id="staffTabsContent">
+                    <div class="tab-pane fade show active" id="all" role="tabpanel">
+                        <div class="row">
+                            <!-- Medical Staff Card -->
+                            <div class="col-md-4">
+                                <div class="card staff-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="avatar bg-primary bg-opacity-10 text-primary">
+                                                <i class="fas fa-user-nurse"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-0">Sarah Johnson</h5>
+                                                <small class="text-muted">Nurse</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <span class="staff-type medical-staff">
+                                                <i class="fas fa-heartbeat me-1"></i> Medical Staff
+                                            </span>
+                                            <span class="status-badge active-status">
+                                                Active
+                                            </span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">ID: #NUR-1024</small>
+                                            <div>
+                                                <button class="btn btn-outline-primary btn-action">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary btn-action">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Administrative Staff Card -->
+                            <div class="col-md-4">
+                                <div class="card staff-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="avatar bg-success bg-opacity-10 text-success">
+                                                <i class="fas fa-user-tie"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-0">Michael Brown</h5>
+                                                <small class="text-muted">HR Manager</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <span class="staff-type admin-staff">
+                                                <i class="fas fa-briefcase me-1"></i> Administrative
+                                            </span>
+                                            <span class="status-badge active-status">
+                                                Active
+                                            </span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">ID: #ADM-2048</small>
+                                            <div>
+                                                <button class="btn btn-outline-primary btn-action">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary btn-action">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Support Staff Card -->
+                            <div class="col-md-4">
+                                <div class="card staff-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="avatar bg-warning bg-opacity-10 text-warning">
+                                                <i class="fas fa-broom"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-0">James Peterson</h5>
+                                                <small class="text-muted">Sanitation Staff</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <span class="staff-type support-staff">
+                                                <i class="fas fa-hands-helping me-1"></i> Support Staff
+                                            </span>
+                                            <span class="status-badge inactive-status">
+                                                Inactive
+                                            </span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">ID: #SUP-4096</small>
+                                            <div>
+                                                <button class="btn btn-outline-primary btn-action">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary btn-action">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Other tabs would contain filtered lists -->
+                    <div class="tab-pane fade" id="medical" role="tabpanel">Medical staff list...</div>
+                    <div class="tab-pane fade" id="admin" role="tabpanel">Admin staff list...</div>
+                    <div class="tab-pane fade" id="support" role="tabpanel">Support staff list...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Staff Modal -->
+    <div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStaffModalLabel">Add New Staff Member</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Staff Type</label>
+                            <select class="form-select" required>
+                                <option value="">Select staff type</option>
+                                <option value="medical">Medical Staff</option>
+                                <option value="admin">Administrative Staff</option>
+                                <option value="support">Support Staff</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Position</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Department</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact Number</label>
+                            <input type="tel" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Staff</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 JK Hospitals. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

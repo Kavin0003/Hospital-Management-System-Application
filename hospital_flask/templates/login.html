@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - JK HOSPITALS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .auth-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .auth-card:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), #1a252f);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .card-header h4 {
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+        }
+        
+        .btn-login {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            font-weight: 500;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-login:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .register-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .register-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        .input-group-text {
+            background-color: white;
+            border-right: none;
+        }
+        
+        .input-with-icon {
+            border-left: none;
+        }
+        
+        .hospital-logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="auth-card card">
+                    <div class="card-header">
+                        <div class="hospital-logo">
+                            <i class="fas fa-hospital me-2"></i>JK HOSPITALS
+                        </div>
+                        <h4>Welcome Back</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Flash message -->
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show mb-4">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <!-- Login form -->
+                        <form method="POST">
+                            <div class="mb-4">
+                                <label class="form-label">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" name="username" class="form-control input-with-icon" 
+                                           placeholder="Enter your username" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" name="password" class="form-control input-with-icon" 
+                                           placeholder="Enter your password" required>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-login w-100 mb-3">
+                                <i class="fas fa-sign-in-alt me-2"></i> Login
+                            </button>
+                            
+                            <div class="text-center mt-4">
+                                <p class="mb-0">Don't have an account? 
+                                    <a href="{{ url_for('auth.register') }}" class="register-link">
+                                        <i class="fas fa-user-plus me-1"></i> Register here
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Appointment - JK Hospitals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .form-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .doctor-card {
+            border-left: 4px solid #3498db;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="form-section">
+                    <h2 class="mb-4 text-center">
+                        <i class="fas fa-calendar-plus me-2"></i>Book New Appointment
+                    </h2>
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" id="appointmentForm">
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Patient</label>
+                                <select name="patient_id" class="form-select" required>
+                                    <option value="">Select Patient</option>
+                                    {% for patient in patients %}
+                                    <option value="{{ patient.patient_id }}">
+                                        {{ patient.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Doctor</label>
+                                <select name="doctor_id" class="form-select" required>
+                                    <option value="">Select Doctor</option>
+                                    {% for doctor in doctors %}
+                                    <option value="{{ doctor.doctor_id }}">
+                                        {{ doctor.name }} ({{ doctor.specialization }})
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" name="date" id="appointmentDate" class="form-control" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Time</label>
+                                <input type="time" name="time" id="appointmentTime" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Reason (Optional)</label>
+                            <textarea name="reason" class="form-control" rows="3" placeholder="Brief reason for appointment"></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calendar-check me-2"></i>Book Appointment
+                            </button>
+                            <a href="{{ url_for('appointments.list') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('appointmentDate');
+            const timeInput = document.getElementById('appointmentTime');
+            const form = document.getElementById('appointmentForm');
+            
+            // Set minimum date to today
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const yyyy = today.getFullYear();
+            dateInput.min = `${yyyy}-${mm}-${dd}`;
+            
+            // Set default time constraints
+            timeInput.min = "09:00";
+            timeInput.max = "17:00";
+            
+            // Update time constraints when date changes
+            dateInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                const isToday = selectedDate.toDateString() === today.toDateString();
+                
+                if(isToday) {
+                    const now = new Date();
+                    const currentHour = now.getHours();
+                    const currentMinute = now.getMinutes();
+                    
+                    // Allow appointments starting from the next hour
+                    const minHour = currentHour < 17 ? currentHour : 17;
+                    timeInput.min = `${String(minHour).padStart(2, '0')}:${String(currentMinute).padStart(2, '0')}`;
+                } else {
+                    timeInput.min = "09:00";
+                }
+            });
+            
+            // Form validation
+            form.addEventListener('submit', function(e) {
+                const selectedDate = new Date(dateInput.value);
+                const selectedTime = timeInput.value;
+                
+                if(selectedDate < today) {
+                    e.preventDefault();
+                    alert("Please select a future date");
+                    return false;
+                }
+                
+                if(selectedDate.toDateString() === today.toDateString()) {
+                    const [hours, minutes] = selectedTime.split(':').map(Number);
+                    const now = new Date();
+                    
+                    if(hours < now.getHours() || 
+                      (hours === now.getHours() && minutes < now.getMinutes())) {
+                        e.preventDefault();
+                        alert("Please select a future time");
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+        });
+    </script>
+</body>
+</html>

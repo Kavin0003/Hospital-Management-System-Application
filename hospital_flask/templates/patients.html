@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Records - JK HOSPITALS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), #1a252f);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .page-header {
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table th {
+            font-weight: 500;
+            padding: 15px;
+        }
+        
+        .table td {
+            vertical-align: middle;
+            padding: 12px 15px;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .action-btn {
+            min-width: 80px;
+            margin: 2px;
+        }
+        
+        .btn-add {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+            font-weight: 500;
+        }
+        
+        .btn-add:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+        
+        .empty-state {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: #bdc3c7;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-hospital me-2"></i>JK HOSPITALS
+            </a>
+            <div class="d-flex">
+                <a href="{{ url_for('dashboard.home') }}" class="btn btn-outline-light me-2">
+                    <i class="fas fa-home me-1"></i> Dashboard
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="page-header">
+                <h2><i class="fas fa-procedures me-2"></i>Patient Records</h2>
+            </div>
+            <a href="{{ url_for('patients.add_patient') }}" class="btn btn-add">
+                <i class="fas fa-plus me-1"></i> Add New Patient
+            </a>
+        </div>
+        
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mb-4">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if patients %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Contact</th>
+                        <th>Address</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient['patient_id'] }}</td>
+                        <td>{{ patient['name'] }}</td>
+                        <td>{{ patient['age'] }}</td>
+                        <td>{{ patient['gender'] }}</td>
+                        <td>{{ patient['contact'] }}</td>
+                        <td>{{ patient['address'] }}</td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center">
+                                <a href="{{ url_for('patients.view_patient', id=patient['patient_id']) }}" 
+                                   class="btn btn-sm btn-info action-btn">
+                                    <i class="fas fa-eye me-1"></i> View
+                                </a>
+                                <a href="{{ url_for('patients.edit_patient', id=patient['patient_id']) }}" 
+                                   class="btn btn-sm btn-warning action-btn">
+                                    <i class="fas fa-edit me-1"></i> Edit
+                                </a>
+                                <a href="{{ url_for('patients.delete_patient', id=patient['patient_id']) }}" 
+                                   class="btn btn-sm btn-danger action-btn"
+                                   onclick="return confirm('Are you sure you want to delete this patient?')">
+                                    <i class="fas fa-trash-alt me-1"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-user-injured"></i>
+            <h4>No Patient Records Found</h4>
+            <p class="text-muted">You haven't added any patients yet. Click the button above to add a new patient.</p>
+            <a href="{{ url_for('patients.add_patient') }}" class="btn btn-add mt-3">
+                <i class="fas fa-plus me-1"></i> Add First Patient
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2023 JK Hospitals. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

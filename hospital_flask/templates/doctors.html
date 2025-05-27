@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors - JK HOSPITALS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #4e73df, #224abe) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        .btn-outline-light {
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-light:hover {
+            transform: translateY(-2px);
+        }
+        .card {
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .table thead th {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5a5c69;
+            background-color: #f8f9fc;
+            border-bottom: 2px solid #e3e6f0;
+        }
+        .table td {
+            vertical-align: middle;
+            font-size: 0.95rem;
+            padding: 0.75rem 1rem;
+        }
+        .btn-success {
+            background-color: #1cc88a;
+            border-color: #1cc88a;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+        .btn-success:hover {
+            background-color: #17a673;
+            border-color: #17a673;
+            transform: translateY(-2px);
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 0.25rem;
+        }
+        .search-bar {
+            max-width: 300px;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #e3e6f0;
+            box-shadow: none;
+        }
+        .search-bar:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+        .badge {
+            font-weight: 600;
+            padding: 0.35rem 0.65rem;
+            border-radius: 0.25rem;
+        }
+        .alert {
+            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+        .doctor-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #4e73df;
+            margin-right: 0.75rem;
+        }
+        .status-available {
+            background-color: #e6f4ea;
+            color: #1e8e3e;
+        }
+        .status-unavailable {
+            background-color: #fce8e6;
+            color: #d93025;
+        }
+        .specialization-badge {
+            background-color: #e8eaf6;
+            color: #3949ab;
+            font-size: 0.75rem;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .breadcrumb {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        .no-records {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+        .table-responsive {
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        .actions-cell {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-hospital me-2"></i>Hospital Management</a>
+            <div class="d-flex">
+                <a href="{{ url_for('dashboard.home') }}" class="btn btn-outline-light me-2">
+                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('dashboard.home') }}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Doctors</li>
+            </ol>
+        </nav>
+        
+        <div class="page-header">
+            <h2 class="h3 mb-0 text-gray-800"><i class="fas fa-user-md me-2"></i>Doctor Records</h2>
+            <div>
+                <a href="{{ url_for('doctors.add_doctor') }}" class="btn btn-success">
+                    <i class="fas fa-plus me-1"></i> Add New Doctor
+                </a>
+            </div>
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle me-2"></i>{{ messages[0] }}
+            </div>
+          {% endif %}
+        {% endwith %}
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-table me-2"></i> Doctor Database
+                </div>
+                <div class="d-flex">
+                    <input type="text" class="form-control search-bar me-2" placeholder="Search doctors...">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-filter me-1"></i> Filter
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                            <li><a class="dropdown-item" href="#">All Specializations</a></li>
+                            <li><a class="dropdown-item" href="#">Cardiology</a></li>
+                            <li><a class="dropdown-item" href="#">Neurology</a></li>
+                            <li><a class="dropdown-item" href="#">Pediatrics</a></li>
+                            <li><a class="dropdown-item" href="#">Orthopedics</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Doctor</th>
+                                <th>Specialization</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doctor in doctors %}
+                            <tr>
+                                <td>{{ doctor.id }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="doctor-avatar">
+                                            {{ doctor.name[0] }}
+                                        </div>
+                                        <div>
+                                            <div class="fw-medium">{{ doctor.name }}</div>
+                                            <small class="text-muted">ID: {{ doctor.id }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge specialization-badge">{{ doctor.specialization }}</span></td>
+                                <td>{{ doctor.contact }}</td>
+                                <td>
+                                    <span class="badge status-available">Available</span>
+                                </td>
+                                <td class="actions-cell">
+                                    <a href="#" class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn btn-sm btn-outline-secondary me-1"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            
+                            {% if not doctors %}
+                            <tr>
+                                <td colspan="6" class="no-records">
+                                    <i class="fas fa-folder-open fa-3x mb-3 text-muted"></i>
+                                    <p>No doctor records found</p>
+                                    <a href="{{ url_for('doctors.add_doctor') }}" class="btn btn-sm btn-primary">Add your first doctor</a>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">Showing <span class="fw-medium">{{ doctors|length }}</span> doctors</small>
+                </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - JK HOSPITALS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --staff-color: #9b59b6;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), #1a252f);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .dashboard-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            background: white;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-body {
+            padding: 2rem 1rem;
+        }
+        
+        .card-title {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .fa-3x {
+            font-size: 2.5em;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+        
+        .btn-info {
+            background-color: #00b894;
+            border-color: #00b894;
+        }
+        
+        .btn-warning {
+            background-color: #f39c12;
+            border-color: #f39c12;
+        }
+        
+        .btn-staff {
+            background-color: var(--staff-color);
+            border-color: var(--staff-color);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: var(--secondary-color);
+            bottom: -8px;
+            left: 25%;
+            border-radius: 2px;
+        }
+        
+        .user-greeting {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand nav-brand" href="{{ url_for('dashboard.home') }}">
+                <i class="fas fa-hospital me-2"></i>JK HOSPITALS
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3 user-greeting">
+                    <i class="fas fa-user-circle me-2"></i>Welcome, {{ username }}
+                </span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 text-center mb-5">
+                <h2>Hospital Management Dashboard</h2>
+                <p class="text-muted">Manage all hospital operations from one place</p>
+            </div>
+            
+            <div class="col-md-10">
+                <div class="row g-4">
+                    <!-- Patients Card -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-procedures fa-3x text-primary"></i>
+                                </div>
+                                <h5 class="card-title">Patient Management</h5>
+                                <p class="text-muted small mb-3">Register and manage patient records</p>
+                                <a href="{{ url_for('dashboard.patient_list') }}" class="btn btn-primary w-100">
+                                    <i class="fas fa-users me-2"></i> Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Doctors Card -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-user-md fa-3x text-success"></i>
+                                </div>
+                                <h5 class="card-title">Doctor Management</h5>
+                                <p class="text-muted small mb-3">Manage doctor profiles and schedules</p>
+                                <a href="{{ url_for('dashboard.doctors') }}" class="btn btn-success w-100">
+                                    <i class="fas fa-stethoscope me-2"></i> Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Staff Management Card -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-users-cog fa-3x" style="color: var(--staff-color);"></i>
+                                </div>
+                                <h5 class="card-title">Staff Management</h5>
+                                <p class="text-muted small mb-3">Manage hospital staff members</p>
+                                <a href="{{ url_for('dashboard.staff') }}" class="btn btn-staff text-white w-100">
+                                    <i class="fas fa-users me-2"></i> Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Appointments Card -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-calendar-check fa-3x text-info"></i>
+                                </div>
+                                <h5 class="card-title">Appointments</h5>
+                                <p class="text-muted small mb-3">Schedule and track appointments</p>
+                                <a href="{{ url_for('dashboard.appointments') }}" class="btn btn-info w-100">
+                                    <i class="fas fa-calendar-alt me-2"></i> Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Billing Card -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-file-invoice-dollar fa-3x text-warning"></i>
+                                </div>
+                                <h5 class="card-title">Billing System</h5>
+                                <p class="text-muted small mb-3">Generate and manage invoices</p>
+                                <a href="{{ url_for('dashboard.billing') }}" class="btn btn-warning w-100">
+                                    <i class="fas fa-receipt me-2"></i> Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 JK Hospitals. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

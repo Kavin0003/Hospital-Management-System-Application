@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Your existing head content remains the same -->
+    <style>
+        /* Add these new styles to your existing style section */
+        .about-footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .about-link {
+            color: var(--secondary-color);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .about-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), #1a252f);
+            color: white;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--secondary-color);
+        }
+        
+        .nav-pills .nav-link {
+            color: var(--primary-color);
+        }
+        
+        .about-content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Your existing login form remains the same -->
+        
+        <!-- Add this footer below your existing container -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6 col-lg-5 text-center">
+                <p class="about-footer">
+                    <a class="about-link" data-bs-toggle="modal" data-bs-target="#aboutModal">
+                        <i class="fas fa-info-circle me-1"></i> About JK Hospitals
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutModalLabel">
+                        <i class="fas fa-hospital me-2"></i>About JK Hospitals
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills mb-4" id="aboutTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">
+                                <i class="fas fa-globe me-1"></i> Overview
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="feedback-tab" data-bs-toggle="pill" data-bs-target="#feedback" type="button" role="tab">
+                                <i class="fas fa-comment-alt me-1"></i> Feedback
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content" id="aboutTabsContent">
+                        <div class="tab-pane fade show active about-content" id="overview" role="tabpanel">
+                            <h4><i class="fas fa-star me-2"></i>Our Mission</h4>
+                            <p>JK Hospitals is committed to providing exceptional healthcare services with compassion and cutting-edge technology.</p>
+                            
+                            <h4 class="mt-4"><i class="fas fa-history me-2"></i>Our History</h4>
+                            <p>Founded in 1995, JK Hospitals has grown from a small clinic to a multi-specialty healthcare provider serving thousands of patients annually.</p>
+                            
+                            <h4 class="mt-4"><i class="fas fa-trophy me-2"></i>Achievements</h4>
+                            <ul>
+                                <li>Accredited by the National Healthcare Board</li>
+                                <li>Recipient of the "Best Hospital Award" 2022</li>
+                                <li>Pioneers in robotic surgery in the region</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-pane fade about-content" id="feedback" role="tabpanel">
+                            <h4><i class="fas fa-comment-medical me-2"></i>Share Your Feedback</h4>
+                            <p>We value your opinion. Please share your experience with us.</p>
+                            
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" placeholder="Enter your name">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" placeholder="Enter your email">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Feedback Type</label>
+                                    <select class="form-select">
+                                        <option>Compliment</option>
+                                        <option>Suggestion</option>
+                                        <option>Complaint</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Your Feedback</label>
+                                    <textarea class="form-control" rows="4" placeholder="Share your thoughts..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-login w-100">
+                                    <i class="fas fa-paper-plane me-2"></i> Submit Feedback
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your existing script remains the same -->
+</body>
+</html>
